@@ -1,0 +1,21 @@
+# Push to Dockerhub
+docker push fnmabreu/microservice-currency-exchange-service:0.0.11-SNAPSHOT
+docker push fnmabreu/microservice-currency-conversion-service:0.0.11-SNAPSHOT
+
+# Create deployment in kubernetes
+kubectl create deployment currency-exchange --image=fnmabreu/microservice-currency-exchange-service:0.0.11-SNAPSHOT
+
+#Create service in kubernetes
+kubectl expose deployment currency-exchange --type=LoadBalancer --port=8000
+
+# Show services
+kubectl get svc
+
+# Deploy service with file yaml
+kubectl apply -f deployment.yaml
+
+# Create env variable
+kubectl create configmap currency-conversion --from-literal=CURRENCY_EXCHANGE_URI=http://currency-exchange
+
+# Show configmap created
+kubectl get configmap currency-conversion -o yaml
